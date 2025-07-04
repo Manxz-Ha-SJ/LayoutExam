@@ -7,13 +7,104 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:background="#FFFFFF"
+        tools:context=".MainActivity">
+
+        <!-- ⭐ 배너 영역 추가 -->
+        <ImageView
+            android:id="@+id/bannerImage"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_facility_search" />
+
+        <!-- 상단 앱 이름 -->
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="타이틀 제목"
+            android:textColor="#8000B8"
+            android:textStyle="bold"
+            android:textSize="24sp"
+            android:paddingBottom="16dp" />
+
+        <!-- 카테고리 탭 (홈, 대출, 예적금, 투자 등) -->
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5dp"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tabLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#FFFFFF"
+                    app:tabIndicatorColor="#8000B8"
+                    app:tabSelectedTextColor="#8000B8"
+                    app:tabTextColor="#000000"
+                    app:tabIndicatorHeight="3dp"
+                    app:tabMode="fixed"
+                    app:tabGravity="center" />
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <FrameLayout
+            android:id="@+id/fragmentContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+<!--        &lt;!&ndash; 그리드 버튼 영역 &ndash;&gt;-->
+<!--        <GridLayout-->
+<!--            android:id="@+id/gridMenu"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:columnCount="3"-->
+<!--            android:rowCount="6"-->
+<!--            android:alignmentMode="alignMargins"-->
+<!--            android:columnOrderPreserved="false"-->
+<!--            android:useDefaultMargins="true">-->
+
+<!--            &lt;!&ndash; 예시 카드 &ndash;&gt;-->
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="vertical"-->
+<!--                android:gravity="center"-->
+<!--                android:background="@drawable/grid_item_bg"-->
+<!--                android:padding="12dp">-->
+
+<!--                <ImageView-->
+<!--                    android:layout_width="36dp"-->
+<!--                    android:layout_height="36dp"-->
+<!--                    android:src="@drawable/cafe"-->
+<!--                    android:contentDescription="대출계산" />-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="대출계산"-->
+<!--                    android:textSize="14sp"-->
+<!--                    android:gravity="center"-->
+<!--                    android:paddingTop="8dp" />-->
+<!--            </LinearLayout>-->
+<!--            &lt;!&ndash; 위 LinearLayout을 복사해서 나머지 항목 구성 (수익률계산, 목표금액계산 등) &ndash;&gt;-->
+<!--        </GridLayout>-->
+        <!-- activity_main.xml 내에 TabLayout 아래에 추가 -->
+
+    </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
