@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">LayoutExam</string>
+    <string name="search_stockname">종목명을 입력하세요 (예: 삼성전자)</string>
+    <string name="search_stock">종목 검색</string>
+
 </resources>
