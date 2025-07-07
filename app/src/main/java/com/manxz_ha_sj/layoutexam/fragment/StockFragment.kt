@@ -65,6 +65,7 @@ class StockFragment : Fragment() {
             // 선택한 종목명을 리스트에 추가
             selectedStockNames.add(selectedName)
             resultStockListAdapter.submitList(selectedStockNames.toList())
+            binding.etStockName.setText("")
             showSearchStockNames(false)
             // binding.etStockName.setText("") // 입력창 초기화(선택사항)
         }
@@ -89,6 +90,7 @@ class StockFragment : Fragment() {
                     }
                     stockNameSearchListAdapter.submitList(filtered)
                     showSearchStockNames(true)
+                    updateSearchListHeight(filtered.size)
                 } else {
                     stockNameSearchListAdapter.submitList(emptyList())
                     showSearchStockNames(false)
@@ -191,7 +193,9 @@ class StockFragment : Fragment() {
                     }
                 }
             } catch (_: Exception) { }
+            if (isAdded) { // 프래그먼트가 아직 붙어있을 때만 실행
             requireActivity().runOnUiThread { onResult(names.sorted()) }
+                }
         }.start()
     }
 
@@ -211,6 +215,19 @@ class StockFragment : Fragment() {
             }
         }
         return result.toString()
+    }
+
+    fun updateSearchListHeight(itemCount: Int, itemHeightDp: Int = 54, maxHeightDp: Int = 270) {
+        val context = binding.rvSearchStockNames.context
+        val density = context.resources.displayMetrics.density
+        val desiredHeight = (itemCount * itemHeightDp * density).toInt()
+        val maxHeightPx = (maxHeightDp * density).toInt()
+        val finalHeight = desiredHeight.coerceAtMost(maxHeightPx)
+
+        binding.rvSearchStockNames.layoutParams = binding.rvSearchStockNames.layoutParams.apply {
+            height = finalHeight
+        }
+        binding.rvSearchStockNames.requestLayout()
     }
 
     private fun showSearchStockNames(show: Boolean) {

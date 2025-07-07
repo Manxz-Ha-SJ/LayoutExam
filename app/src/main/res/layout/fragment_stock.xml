@@ -45,19 +45,21 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvResult"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="24dp"
-            android:overScrollMode="never"
+            android:layout_height="596dp"
             android:background="#FFFFFF"
-            android:elevation="2dp" />
+            android:elevation="2dp"
+            android:overScrollMode="never"
+            android:paddingTop="24dp" />
     </LinearLayout>
 
     <!-- 오버레이로 etStockName 바로 아래에 표시되는 RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvSearchStockNames"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginTop="60dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
         android:layout_gravity="top"
         android:visibility="gone"
         android:background="#FAFAFA"

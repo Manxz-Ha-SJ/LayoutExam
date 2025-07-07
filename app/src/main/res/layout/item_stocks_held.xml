@@ -8,46 +8,47 @@
     android:foreground="?android:attr/selectableItemBackground"
     app:cardCornerRadius="12dp"
     app:cardElevation="2dp">
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/item_root"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/item_root"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="2dp">
+        <!-- 상위 CardView의 높이가 wrap_content이므로, 내부 LinearLayout을 위/아래로 제약 -->
+        <LinearLayout
+            android:id="@+id/llContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="2dp">
-            <!-- 상위 CardView의 높이가 wrap_content이므로, 내부 LinearLayout을 위/아래로 제약 -->
-            <LinearLayout
-                android:id="@+id/llContent"
-                android:layout_width="match_parent"
+            android:padding="8dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_icon"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/food"
+                android:padding="4dp" />
+
+            <TextView
+                android:id="@+id/tvStockName"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:paddingLeft="10dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                android:layout_weight="1"
+                android:text="종목명"
+                android:textSize="16sp" />
 
-                <ImageView
-                    android:id="@+id/iv_icon"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:src="@drawable/food"
-                    android:padding="4dp" />
-
-                <TextView
-                    android:id="@+id/tvStockName"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="종목명"
-                    android:textSize="16sp" />
-
-                <ImageView
-                    android:id="@+id/iv_delete"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:src="@drawable/delete"
-                    android:padding="2dp" />
-            </LinearLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            <ImageView
+                android:id="@+id/iv_delete"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/delete"
+                android:padding="2dp" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
