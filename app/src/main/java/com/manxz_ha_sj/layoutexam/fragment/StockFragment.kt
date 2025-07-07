@@ -1,16 +1,12 @@
-package com.manxz_ha_sj.layoutexam
+// 패키지 경로를 파일 위치에 맞게 수정
+package com.manxz_ha_sj.layoutexam.fragment
 
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import com.manxz_ha_sj.layoutexam.R
 import androidx.fragment.app.Fragment
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -18,20 +14,23 @@ import java.util.Locale
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import java.util.*
+import com.manxz_ha_sj.layoutexam.BuildConfig
 import com.manxz_ha_sj.layoutexam.service.StockPriceResponse
-import com.manxz_ha_sj.layoutexam.BuildConfig // BuildConfig에서 ServiceKey를 가져옵니다.
 import com.manxz_ha_sj.layoutexam.databinding.FragmentStockBinding
-import com.manxz_ha_sj.layoutexam.ui.search.StockNameListAdapter
+import com.manxz_ha_sj.layoutexam.ui.search.ResultStockListAdapter
+import com.manxz_ha_sj.layoutexam.ui.search.StockNameSearchListAdapter
 
 class StockFragment : Fragment() {
     private var _binding: FragmentStockBinding? = null
     private val binding get() = _binding!!
 
-    // 전체 종목명 리스트 (예시, 실제로는 API나 로컬 파일에서 불러와야 함)
-    private val allStockNames = listOf("하이트진로", "하림지주", "한국사료", "삼성전자", "LG화학", "현대차")
+    // 전체 종목명 리스트 (API로 받아올 예정)
+    private var allStockNames: List<String> = emptyList()
+    private lateinit var stockNameSearchListAdapter: StockNameSearchListAdapter
 
-    private lateinit var adapter: StockNameListAdapter
+    // 선택된 종목명을 저장할 리스트
+    private val selectedStockNames = mutableListOf<String>()
+    private lateinit var resultStockListAdapter: ResultStockListAdapter
 
     /**
      * Fragment의 뷰를 생성하는 메소드
@@ -45,7 +44,7 @@ class StockFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentStockBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -57,17 +56,43 @@ class StockFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // RecyclerView 및 Adapter 설정
-        adapter = StockNameListAdapter()
-        binding.rvStockNames.adapter = adapter
+        resultStockListAdapter = ResultStockListAdapter()
+        binding.rvResult.adapter = resultStockListAdapter
+        binding.rvResult.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
 
+        // 1. 어댑터 먼저 초기화
+        stockNameSearchListAdapter = StockNameSearchListAdapter { selectedName ->
+            // 선택한 종목명을 리스트에 추가
+            selectedStockNames.add(selectedName)
+            resultStockListAdapter.submitList(selectedStockNames.toList())
+            showSearchStockNames(false)
+            // binding.etStockName.setText("") // 입력창 초기화(선택사항)
+        }
+        // 2. RecyclerView에 어댑터와 레이아웃매니저 연결
+        binding.rvSearchStockNames.adapter = stockNameSearchListAdapter
+        binding.rvSearchStockNames.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
 
-        // EditText 입력 시 실시간 필터링
+        // 처음에는 RecyclerView를 숨김
+        showSearchStockNames(false)
+
+        getStockNames { names ->
+            allStockNames = names
+            // adapter.submitList(allStockNames) // 초기에는 리스트를 보여주지 않음
+        }
+
         binding.etStockName.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 val keyword = s.toString()
-                val filtered = allStockNames.filter { it.contains(keyword) }
-                adapter.submitList(filtered)
+                if (keyword.isNotEmpty()) {
+                    val filtered = allStockNames.filter {
+                        it.contains(keyword) || getInitialSound(it).contains(getInitialSound(keyword))
+                    }
+                    stockNameSearchListAdapter.submitList(filtered)
+                    showSearchStockNames(true)
+                } else {
+                    stockNameSearchListAdapter.submitList(emptyList())
+                    showSearchStockNames(false)
+                }
             }
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
@@ -129,8 +154,70 @@ class StockFragment : Fragment() {
                 calendar.add(Calendar.DATE, -1) // 하루 전으로 이동
             }
             requireActivity().runOnUiThread {
-                binding.tvResult.text = resultText
+                // binding.tvResult.text = resultText // 기존 코드 주석 처리
+                // 결과를 rvResult에 추가 (선택된 종목명 리스트에 추가)
+                selectedStockNames.add(resultText)
+                resultStockListAdapter.submitList(selectedStockNames.toList())
             }
         }.start()
+    }
+
+    /**
+     * 종목명 리스트를 API에서 받아오는 함수
+     */
+    private fun getStockNames(onResult: (List<String>) -> Unit) {
+        val serviceKey = BuildConfig.KRX_API_KEY
+        val sdf = SimpleDateFormat("yyyyMMdd", Locale.KOREA)
+        val calendar = Calendar.getInstance()
+        // 최근 수요일로 이동
+        while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.WEDNESDAY) {
+            calendar.add(Calendar.DATE, -1)
+        }
+        val basDt = sdf.format(calendar.time)
+        val client = OkHttpClient()
+        val names = mutableSetOf<String>()
+        val totalPages = 4 // 1000개씩 4페이지 = 4000개 (필요시 더 늘릴 수 있음)
+        Thread {
+            try {
+                for (page in 1..totalPages) {
+                    val url = "https://apis.data.go.kr/1160100/service/GetStockSecuritiesInfoService/getStockPriceInfo" +
+                            "?serviceKey=$serviceKey&numOfRows=1000&pageNo=$page&resultType=json&basDt=$basDt"
+                    val request = Request.Builder().url(url).build()
+                    val response = client.newCall(request).execute()
+                    val body = response.body?.string()
+                    if (body != null) {
+                        val result = Gson().fromJson(body, StockPriceResponse::class.java)
+                        result.response.body.items.item.forEach { names.add(it.itmsNm) }
+                    }
+                }
+            } catch (_: Exception) { }
+            requireActivity().runOnUiThread { onResult(names.sorted()) }
+        }.start()
+    }
+
+    // 한글 초성 추출 함수
+    private fun getInitialSound(str: String): String {
+        val initialConsonants = listOf(
+            'ㄱ','ㄲ','ㄴ','ㄷ','ㄸ','ㄹ','ㅁ','ㅂ','ㅃ','ㅅ','ㅆ','ㅇ','ㅈ','ㅉ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'
+        )
+        val result = StringBuilder()
+        for (ch in str) {
+            if (ch in '\uAC00'..'\uD7A3') {
+                val uniVal = ch - '\uAC00'
+                val cho = uniVal / (21 * 28)
+                result.append(initialConsonants[cho])
+            } else {
+                result.append(ch)
+            }
+        }
+        return result.toString()
+    }
+
+    private fun showSearchStockNames(show: Boolean) {
+        if (show) {
+            binding.rvSearchStockNames.visibility = View.VISIBLE
+        } else {
+            binding.rvSearchStockNames.visibility = View.GONE
+        }
     }
 }

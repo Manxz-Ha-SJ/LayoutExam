@@ -7,6 +7,10 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.tabs.TabLayout
 import com.manxz_ha_sj.layoutexam.databinding.ActivityMainBinding
+import com.manxz_ha_sj.layoutexam.fragment.StockFragment
+import com.manxz_ha_sj.layoutexam.fragment.SavingFragment
+import com.manxz_ha_sj.layoutexam.fragment.HomeFragment
+import com.manxz_ha_sj.layoutexam.fragment.LoanFragment
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding

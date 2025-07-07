@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="15dp">
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:id="@+id/llMain"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="15dp">
 
         <EditText
             android:id="@+id/etStockName"
@@ -11,25 +17,42 @@
             android:layout_height="wrap_content"
             android:singleLine="true"
             android:hint="@string/search_stockname" />
-        <!-- RecyclerView: 종목명 리스트 -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvStockNames"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginTop="8dp" />
 
-        <Button
+        <TextView
             android:id="@+id/btnFetch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/search_stock" />
+            android:textSize="15dp"
+            android:text="@string/stocks_held" />
 
-        <TextView
-            android:id="@+id/tvResult"
+        <View
+            android:id="@+id/divider_view"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="3dp"
+            android:layout_marginEnd="3dp"
+            android:background="#ff0000" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvResult"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="결과 출력 영역"
-            android:textSize="16sp"
-            android:paddingTop="24dp" />
+            android:paddingTop="24dp"
+            android:overScrollMode="never"
+            android:background="#FFFFFF"
+            android:elevation="2dp" />
+    </LinearLayout>
 
-</LinearLayout>
+    <!-- 오버레이로 etStockName 바로 아래에 표시되는 RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvSearchStockNames"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="48dp"
+        android:layout_gravity="top"
+        android:visibility="gone"
+        android:background="#FAFAFA"
+        android:elevation="8dp" />
+
+</FrameLayout>
