@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/llMain"
@@ -15,23 +14,32 @@
             android:id="@+id/etStockName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/editbox_bg_gray"
             android:singleLine="true"
-            android:hint="@string/search_stockname" />
-
-        <TextView
-            android:id="@+id/btnFetch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="15dp"
-            android:text="@string/stocks_held" />
+            android:hint="@string/search_stockname"
+            android:padding="15dp"
+            android:inputType="text" />
 
         <View
             android:id="@+id/divider_view"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:layout_marginStart="3dp"
-            android:layout_marginEnd="3dp"
+            android:layout_marginEnd="3dp" />
+
+        <TextView
+            android:id="@+id/btnFetch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:text="@string/stocks_held" />
+
+        <View
+            android:id="@+id/divider_view1"
+            android:layout_width="60dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
             android:background="#ff0000" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -49,7 +57,7 @@
         android:id="@+id/rvSearchStockNames"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="60dp"
         android:layout_gravity="top"
         android:visibility="gone"
         android:background="#FAFAFA"

@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.manxz_ha_sj.layoutexam.databinding.ItemStockNameBinding
+import com.manxz_ha_sj.layoutexam.databinding.ItemStockInfoBinding
 
 /**
  * @class StockNameSearchListAdapter
@@ -48,7 +48,7 @@ class StockNameSearchListAdapter(
      * @brief 각 아이템 뷰와 데이터 바인딩을 담당
      * @param binding 아이템 레이아웃 바인딩 객체
      */
-    inner class ViewHolder(val binding: ItemStockNameBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class ViewHolder(val binding: ItemStockInfoBinding) : RecyclerView.ViewHolder(binding.root)
 
     /**
      * @brief 아이템 뷰 생성 (ViewHolder 생성)
@@ -57,7 +57,7 @@ class StockNameSearchListAdapter(
      * @return ViewHolder 객체
      */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = ItemStockNameBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemStockInfoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
     /**

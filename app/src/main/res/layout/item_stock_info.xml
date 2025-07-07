@@ -7,131 +7,40 @@
     android:backgroundTint="#FFFFFF"
     android:foreground="?android:attr/selectableItemBackground"
     app:cardCornerRadius="12dp"
-    app:cardElevation="3dp">
-
+    app:cardElevation="2dp">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/item_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="4dp">
-
-        <!-- 1. 좌측 검색 심볼 -->
+        android:padding="2dp">
+        <!-- 상위 CardView의 높이가 wrap_content이므로, 내부 LinearLayout을 위/아래로 제약 -->
         <LinearLayout
-            android:id="@+id/left_group"
-            android:layout_width="40dp"
+            android:id="@+id/llContent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
-            android:layout_marginEnd="2dp"
-            android:layout_marginTop="1dp"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
+            android:padding="8dp"
+            android:paddingLeft="10dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    android:id="@+id/iv_search_icon"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:src="@drawable/gas"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tv_search_icon_text"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:gravity="center"
-                    android:paddingBottom="8dp"
-                    android:text="A"
-                    android:textColor="#FFFFFF"
-                    android:textStyle="bold" />
-            </FrameLayout>
-
-            <TextView
-                android:id="@+id/tv_list_distance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="999km"
-                android:textColor="#999999"
-                android:textSize="12sp" />
-        </LinearLayout>
-
-        <!-- 2. 좌측 심볼 -->
-        <LinearLayout
-            android:id="@+id/left_icon_group"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
-            android:layout_marginEnd="2dp"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/left_group"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintEnd_toEndOf="parent">
 
             <ImageView
-                android:id="@+id/iv_sub_icon"
+                android:id="@+id/iv_icon"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:background="@drawable/grid_item_bg"
-                android:src="@drawable/hotel"
-                android:padding="4dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </LinearLayout>
-
-        <!-- 3. 이름 텍스트 그룹 -->
-        <LinearLayout
-            android:id="@+id/text_group"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
-            android:layout_marginEnd="2dp"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/btn_group"
-            app:layout_constraintStart_toEndOf="@id/left_icon_group"
-            app:layout_constraintTop_toTopOf="parent">
+                android:src="@drawable/food"
+                android:padding="4dp" />
 
             <TextView
-                android:id="@+id/tv_list_name"
-                android:layout_width="match_parent"
+                android:id="@+id/tvStockName"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="이름"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <!-- 3. 우측 버튼 그룹 -->
-        <LinearLayout
-            android:id="@+id/btn_group"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                android:id="@+id/tv_Options"
-                android:layout_width="32dp"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:paddingTop="12dp"
-                android:paddingBottom="12dp"
-                android:text="..."
-                android:textAppearance="?android:textAppearanceMedium" />
+                android:layout_weight="1"
+                android:text="종목명"
+                android:textSize="16sp" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
-

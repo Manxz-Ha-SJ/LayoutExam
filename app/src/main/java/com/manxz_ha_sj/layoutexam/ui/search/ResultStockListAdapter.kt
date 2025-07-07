@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.manxz_ha_sj.layoutexam.databinding.ItemStockNameBinding
+import com.manxz_ha_sj.layoutexam.databinding.ItemStocksHeldBinding
 
 class ResultStockListAdapter : ListAdapter<String, ResultStockListAdapter.ViewHolder>(DIFF) {
     companion object {
@@ -15,11 +15,11 @@ class ResultStockListAdapter : ListAdapter<String, ResultStockListAdapter.ViewHo
         }
     }
 
-    inner class ViewHolder(val binding: ItemStockNameBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class ViewHolder(val binding: ItemStocksHeldBinding) : RecyclerView.ViewHolder(binding.root)
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = ItemStockNameBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemStocksHeldBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
