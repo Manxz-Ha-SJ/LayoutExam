@@ -8,14 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
-import com.google.gson.Gson
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import com.manxz_ha_sj.layoutexam.BuildConfig
-import com.manxz_ha_sj.layoutexam.service.StockPriceResponse
 import com.manxz_ha_sj.layoutexam.databinding.FragmentStockBinding
 import com.manxz_ha_sj.layoutexam.ui.search.ResultStockListAdapter
 import com.manxz_ha_sj.layoutexam.ui.search.StockNameSearchListAdapter
@@ -34,10 +26,7 @@ class StockFragment : Fragment() {
     // nameMarketPairs 멤버 변수 추가
     private var nameMarketPairs: List<Pair<String, String>> = emptyList()
 
-    private val simpleDateFormat = SimpleDateFormat("yyyyMMdd", Locale.KOREA)
-    private val client = OkHttpClient()
-    private val totalPages = 4  // 1000개씩 4페이지 = 4000개 (필요시 더 늘릴 수 있음)
-    private val numOfRows = 1000
+
 
     /** @brief 검색을 위한 SearchManager 인스턴스 */
     private val searchManager = SearchManager.getInstance()
@@ -86,16 +75,18 @@ class StockFragment : Fragment() {
         // 처음에는 RecyclerView를 숨김
         showSearchStockNames(false)
 
-        getStockNames { nameMarketPairs ->
-            // stockNameSearchListAdapter에서 사용할 수 있도록 nameMarketPairs를 저장
-            this.nameMarketPairs = nameMarketPairs
+        searchManager.getStockNames(
+        ) { nameMarketPairs ->
+            requireActivity().runOnUiThread {
+                this.nameMarketPairs = nameMarketPairs
+            }
         }
 
         binding.etStockName.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 val keyword = s.toString()
                 if (keyword.isNotEmpty()) {
-                    val filtered = nameMarketPairs.filter { isKoreanPrefixMatch(it.first, keyword) }
+                    val filtered = nameMarketPairs.filter { searchManager.isKoreanPrefixMatch(it.first, keyword) }
                     stockNameSearchListAdapter.submitList(filtered)
                     showSearchStockNames(true)
                 } else {
@@ -106,10 +97,6 @@ class StockFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
-
-        // 기본 날짜 = 어제
-        val sdf = SimpleDateFormat("yyyyMMdd", Locale.KOREA)
-        val yesterday = Calendar.getInstance().apply { add(Calendar.DATE, -1) }
 
         // 버튼 클릭 시 데이터 요청
         binding.btnFetch.setOnClickListener {
@@ -129,101 +116,10 @@ class StockFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
     /**
-     * 종목명 리스트를 API에서 받아오는 함수
-     * @param onResult (종목명, 시장구분) 쌍의 리스트를 반환
+     * 검색 종목명을 표시할 RecyclerView의 가시성을 설정하는 메소드
+     * @param show true면 RecyclerView를 보이게, false면 숨김
      */
-    private fun getStockNames(onResult: (List<Pair<String, String>>) -> Unit) {
-        val serviceKey = BuildConfig.KRX_API_KEY
-        val calendar = Calendar.getInstance().apply {
-            // 최근 수요일 찾기
-            while (get(Calendar.DAY_OF_WEEK) != Calendar.WEDNESDAY) {
-                add(Calendar.DATE, -1)
-            }
-        }
-        val basDt = simpleDateFormat.format(calendar.time)
-        val nameMarketPairs = mutableSetOf<Pair<String, String>>()
-
-        Thread {
-            try {
-                for (page in 1..totalPages) {
-                    val url = searchManager.buildUrl(basDt, page)
-                    val request = Request.Builder().url(url).build()
-                    val response = client.newCall(request).execute()
-                    val body = response.body?.string()
-                    if (body != null) {
-                        val result = Gson().fromJson(body, StockPriceResponse::class.java)
-                        result.response.body.items.item.forEach {
-                            nameMarketPairs.add(it.itmsNm to it.mrktCtg)
-                        }
-                    }
-                }
-            } catch (_: Exception) { }
-            if (isAdded) {
-                requireActivity().runOnUiThread { onResult(nameMarketPairs.sortedBy { it.first }) }
-            }
-        }.start()
-    }
-
-    // 전체 문자열에서 초성 추출
-    private fun getInitialSound(str: String): String {
-        val initialConsonants = listOf(
-            'ㄱ','ㄲ','ㄴ','ㄷ','ㄸ','ㄹ','ㅁ','ㅂ','ㅃ','ㅅ','ㅆ','ㅇ','ㅈ','ㅉ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'
-        )
-        val result = StringBuilder()
-        for (ch in str) {
-            if (ch in '\uAC00'..'\uD7A3') {
-                val uniVal = ch - '\uAC00'
-                val cho = uniVal / (21 * 28)
-                result.append(initialConsonants[cho])
-            } else {
-                result.append(ch) // 한글이 아니면 그대로 추가
-            }
-        }
-        return result.toString()
-    }
-
-    // 종목명에서 한글이 시작되는 위치 반환
-    private fun getFirstHangulIndex(str: String): Int {
-        for (i in str.indices) {
-            if (str[i] in '\uAC00'..'\uD7A3') return i
-        }
-        return -1
-    }
-
-    // 한글 초성(자음)인지 판별하는 함수
-    private fun isKoreanInitial(ch: Char): Boolean {
-        return ch in 'ㄱ'..'ㅎ'
-    }
-
-    // 혼합/초성/완성형/조합형 모두 지원, 맨 앞에서부터만 일치
-    private fun isKoreanPrefixMatch(target: String, keyword: String): Boolean {
-        if (keyword.isEmpty() || target.length < keyword.length) return false
-        for (i in keyword.indices) {
-            val k = keyword[i]
-            val t = target[i]
-            if (isKoreanInitial(k)) {
-                if (getInitialSound(t.toString())[0] != k) return false
-            } else {
-                if (t != k) return false
-            }
-        }
-        return true
-    }
-
-    fun updateSearchListHeight(itemCount: Int, itemHeightDp: Int = 54, maxHeightDp: Int = 270) {
-        val context = binding.rvSearchStockNames.context
-        val density = context.resources.displayMetrics.density
-        val desiredHeight = (itemCount * itemHeightDp * density).toInt()
-        val maxHeightPx = (maxHeightDp * density).toInt()
-        val finalHeight = desiredHeight.coerceAtMost(maxHeightPx)
-
-        binding.rvSearchStockNames.layoutParams = binding.rvSearchStockNames.layoutParams.apply {
-            height = finalHeight
-        }
-        binding.rvSearchStockNames.requestLayout()
-    }
 
     private fun showSearchStockNames(show: Boolean) {
         if (show) {
