@@ -7,12 +7,11 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp"
+        android:padding="10dp"
         android:background="#FFFFFF"
         tools:context=".MainActivity">
 
@@ -25,85 +24,85 @@
             android:src="@drawable/ic_facility_search" />
 
         <!-- 상단 앱 이름 -->
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="타이틀 제목"
-            android:textColor="#8000B8"
-            android:textStyle="bold"
-            android:textSize="24sp"
-            android:paddingBottom="16dp" />
-
-        <!-- 카테고리 탭 (홈, 대출, 예적금, 투자 등) -->
-        <HorizontalScrollView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="5dp"
-            android:scrollbars="none">
-
-            <LinearLayout
-                android:orientation="horizontal"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/title"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:text="타이틀 제목"
+                android:textColor="#8000B8"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:paddingBottom="5dp" />
+            <ImageView
+                android:id="@+id/iv_delete"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_poi_favorite_outline"
+                android:padding="2dp" />
+        </LinearLayout>
 
-                <com.google.android.material.tabs.TabLayout
-                    android:id="@+id/tabLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="#FFFFFF"
-                    android:textSize="15sp"
-                    app:tabTextAppearance="@style/TabTextStyle"
-                    app:tabIndicatorColor="#ff4500"
-                    app:tabTextColor="@color/tab_text_color"
-                    app:tabIndicatorHeight="1dp"
-                    app:tabMode="fixed"
-                    app:tabGravity="center" />
-            </LinearLayout>
-        </HorizontalScrollView>
+        <!-- 카테고리 탭 (홈, 대출, 예적금, 투자 등) -->
+<!--        <HorizontalScrollView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:paddingBottom="2dp"-->
+<!--            android:scrollbars="none">-->
+
+<!--            <LinearLayout-->
+<!--                android:orientation="horizontal"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content">-->
+
+                    <com.google.android.material.tabs.TabLayout
+                        android:id="@+id/tabLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#FFFFFF"
+                        app:tabMode="fixed"
+                        app:tabGravity="fill"
+                        app:tabTextAppearance="@style/TabTextStyle"
+                        app:tabIndicatorColor="#ff4500"
+                        app:tabIndicatorHeight="2dp"
+                        app:tabPaddingBottom="0dp"
+                        app:tabRippleColor="@android:color/transparent" >
+
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="홈" />
+
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text=" 종목 관리" />
+
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="투자" />
+
+<!--                    <com.google.android.material.tabs.TabItem-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:text="환율" />-->
+
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="생활" />
+                </com.google.android.material.tabs.TabLayout>
+<!--            </LinearLayout>-->
+<!--        </HorizontalScrollView>-->
 
         <FrameLayout
             android:id="@+id/fragmentContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-
-<!--        &lt;!&ndash; 그리드 버튼 영역 &ndash;&gt;-->
-<!--        <GridLayout-->
-<!--            android:id="@+id/gridMenu"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:columnCount="3"-->
-<!--            android:rowCount="6"-->
-<!--            android:alignmentMode="alignMargins"-->
-<!--            android:columnOrderPreserved="false"-->
-<!--            android:useDefaultMargins="true">-->
-
-<!--            &lt;!&ndash; 예시 카드 &ndash;&gt;-->
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:orientation="vertical"-->
-<!--                android:gravity="center"-->
-<!--                android:background="@drawable/grid_item_bg"-->
-<!--                android:padding="12dp">-->
-
-<!--                <ImageView-->
-<!--                    android:layout_width="36dp"-->
-<!--                    android:layout_height="36dp"-->
-<!--                    android:src="@drawable/cafe"-->
-<!--                    android:contentDescription="대출계산" />-->
-
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="대출계산"-->
-<!--                    android:textSize="14sp"-->
-<!--                    android:gravity="center"-->
-<!--                    android:paddingTop="8dp" />-->
-<!--            </LinearLayout>-->
-<!--            &lt;!&ndash; 위 LinearLayout을 복사해서 나머지 항목 구성 (수익률계산, 목표금액계산 등) &ndash;&gt;-->
-<!--        </GridLayout>-->
-        <!-- activity_main.xml 내에 TabLayout 아래에 추가 -->
 
     </LinearLayout>
 

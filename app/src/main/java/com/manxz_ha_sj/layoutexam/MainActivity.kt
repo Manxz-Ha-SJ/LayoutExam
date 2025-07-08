@@ -30,10 +30,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         // 탭 제목 추가
-        val tabTitles = listOf("홈", "주식 종목 관리", "투자", "환율", "예적금", "생활")
-        tabTitles.forEach {
-            binding.tabLayout.addTab(binding.tabLayout.newTab().setText(it))
-        }
+//        val tabTitles = listOf("홈", "주식 종목 관리", "투자", "환율", "생활")
+//        tabTitles.forEach {
+//            binding.tabLayout.addTab(binding.tabLayout.newTab().setText(it))
+//        }
 
         // 첫 화면에 '홈' 프래그먼트 표시
         replaceFragment(HomeFragment())

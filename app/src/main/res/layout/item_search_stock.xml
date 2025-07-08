@@ -11,14 +11,13 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/item_root"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="2dp">
+        android:layout_height="wrap_content">
         <!-- 상위 CardView의 높이가 wrap_content이므로, 내부 LinearLayout을 위/아래로 제약 -->
         <LinearLayout
             android:id="@+id/llContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp"
+            android:padding="5dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:gravity="center_vertical"

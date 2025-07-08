@@ -17,7 +17,7 @@ android {
 
     defaultConfig {
         applicationId = "com.manxz_ha_sj.layoutexam"
-        minSdk = 36
+        minSdk = 28
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"

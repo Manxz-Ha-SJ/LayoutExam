@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="TabTextStyle" parent="TextAppearance.Design.Tab">
-        <item name="android:textSize">15sp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:fontFamily">casual</item>
+        <item name="android:textSize">15sp</item>     <!-- 글자 크기 고정 -->
+        <item name="android:maxLines">1</item>        <!-- 줄바꿈 방지 -->
+        <item name="android:ellipsize">end</item>     <!-- 너무 길면 ... -->
+        <item name="android:textStyle">bold</item>    <!-- (선택) 강조 -->
     </style>
 </resources>

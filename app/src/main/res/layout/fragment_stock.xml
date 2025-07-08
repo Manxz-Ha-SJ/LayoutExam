@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingStart="10dp"
+    android:paddingEnd="10dp"
+    android:paddingTop="5dp"
+    android:paddingBottom="2dp">
 
     <LinearLayout
         android:id="@+id/llMain"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="15dp">
+        android:orientation="vertical">
 
         <EditText
             android:id="@+id/etStockName"
@@ -16,21 +19,23 @@
             android:layout_height="wrap_content"
             android:background="@drawable/editbox_bg_gray"
             android:singleLine="true"
+            android:textSize="15sp"
             android:hint="@string/search_stockname"
-            android:padding="15dp"
+            android:padding="8dp"
             android:inputType="text" />
 
-        <View
-            android:id="@+id/divider_view"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginStart="3dp"
-            android:layout_marginEnd="3dp" />
+<!--        <View-->
+<!--            android:id="@+id/divider_view"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="1dp"-->
+<!--            android:layout_marginTop="5dp"-->
+<!--            android:layout_marginStart="3dp"-->
+<!--            android:layout_marginEnd="3dp" />-->
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:textSize="15sp"
             android:text="@string/stocks_held" />
 
@@ -38,7 +43,7 @@
             android:id="@+id/divider_view1"
             android:layout_width="60dp"
             android:layout_height="1dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="2dp"
             android:background="#ff0000" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -47,8 +52,10 @@
             android:layout_height="596dp"
             android:background="#FFFFFF"
             android:elevation="2dp"
-            android:overScrollMode="never"
-            android:paddingTop="24dp" />
+            android:overScrollMode="always"
+            android:scrollbars="vertical"
+            android:fadeScrollbars="false"
+            android:paddingTop="5dp" />
     </LinearLayout>
 
     <!-- 오버레이로 etStockName 바로 아래에 표시되는 RecyclerView -->
@@ -56,9 +63,9 @@
         android:id="@+id/rvSearchStockNames"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="70dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginEnd="1dp"
         android:layout_gravity="top"
         android:visibility="gone"
         android:background="#FAFAFA"
