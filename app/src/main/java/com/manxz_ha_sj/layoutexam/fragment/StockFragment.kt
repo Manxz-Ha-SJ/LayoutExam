@@ -16,18 +16,20 @@ import com.manxz_ha_sj.layoutexam.service.SearchManager
 class StockFragment : Fragment() {
     private var _binding: FragmentStockBinding? = null
     private val binding get() = _binding!!
-
+    /** @brief 종목명 검색 결과를 표시할 RecyclerView 어댑터 */
     private lateinit var stockNameSearchListAdapter: StockNameSearchListAdapter
-
+    /** @brief 선택한 종목 표시할 RecyclerView 어댑터 */
+    private lateinit var resultStockListAdapter: ResultStockListAdapter
+    /**
+     * @brief 선택된 종목명을 저장할 리스트
+     * @details 종목명과 시장구분 정보를 Pair로 저장합니다.
+     * Pair<String, String> 형태로 변경하여 종목명과 시장구분을 함께 저장합니다.
+     */
     // 선택된 종목명을 저장할 리스트 (Pair<String, String>으로 변경)
     private val selectedStockNames = mutableListOf<Pair<String, String>>()
-    private lateinit var resultStockListAdapter: ResultStockListAdapter
 
     // nameMarketPairs 멤버 변수 추가
     private var nameMarketPairs: List<Pair<String, String>> = emptyList()
-
-
-
     /** @brief 검색을 위한 SearchManager 인스턴스 */
     private val searchManager = SearchManager.getInstance()
 
@@ -75,10 +77,11 @@ class StockFragment : Fragment() {
         // 처음에는 RecyclerView를 숨김
         showSearchStockNames(false)
 
-        searchManager.getStockNames(
-        ) { nameMarketPairs ->
-            requireActivity().runOnUiThread {
-                this.nameMarketPairs = nameMarketPairs
+        searchManager.getStockNames { nameMarketPairs ->
+            activity?.runOnUiThread {
+                if (isAdded) {
+                    this.nameMarketPairs = nameMarketPairs
+                }
             }
         }
 
@@ -97,15 +100,6 @@ class StockFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
-
-        // 버튼 클릭 시 데이터 요청
-        binding.btnFetch.setOnClickListener {
-            val keyword = binding.etStockName.text.toString().trim()
-            // 종목명, 시장구분 정보가 있는 nameMarketPairs에서 해당 종목을 찾아 추가
-            val selectedPair = nameMarketPairs.find { it.first == keyword } ?: (keyword to "")
-            selectedStockNames.add(selectedPair)
-            resultStockListAdapter.submitList(selectedStockNames.toList())
-        }
     }
 
     /**

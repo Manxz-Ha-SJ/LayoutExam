@@ -52,10 +52,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="#FFFFFF"
-                    app:tabIndicatorColor="#8000B8"
-                    app:tabSelectedTextColor="#8000B8"
-                    app:tabTextColor="#000000"
-                    app:tabIndicatorHeight="3dp"
+                    android:textSize="15sp"
+                    app:tabTextAppearance="@style/TabTextStyle"
+                    app:tabIndicatorColor="#ff4500"
+                    app:tabTextColor="@color/tab_text_color"
+                    app:tabIndicatorHeight="1dp"
                     app:tabMode="fixed"
                     app:tabGravity="center" />
             </LinearLayout>
