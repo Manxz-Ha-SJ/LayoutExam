@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearSnapHelper
 import com.manxz_ha_sj.layoutexam.databinding.FragmentStockBinding
 import com.manxz_ha_sj.layoutexam.ui.search.ResultStockListAdapter
 import com.manxz_ha_sj.layoutexam.ui.search.StockNameSearchListAdapter
@@ -83,7 +82,8 @@ class StockFragment : Fragment() {
                 if (isAdded) {
                     this.nameMarketPairs = nameMarketPairs
                 }
-            } }
+            }
+        }
 
         binding.etStockName.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
