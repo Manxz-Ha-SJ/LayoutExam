@@ -63,6 +63,8 @@
         android:layout_gravity="top"
         android:visibility="gone"
         android:background="#FAFAFA"
-        android:elevation="8dp" />
+        android:elevation="8dp"
+        android:overScrollMode="always"
+        android:scrollbars="vertical" />
 
 </FrameLayout>
