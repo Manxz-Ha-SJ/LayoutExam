@@ -1,6 +1,7 @@
 // 패키지 경로를 파일 위치에 맞게 수정
 package com.manxz_ha_sj.layoutexam.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import com.manxz_ha_sj.layoutexam.StockManager
 import com.manxz_ha_sj.layoutexam.databinding.FragmentStockBinding
 import com.manxz_ha_sj.layoutexam.ui.search.HeldStockListAdapter
 import com.manxz_ha_sj.layoutexam.ui.search.SearchAllStockListAdapter
@@ -126,7 +128,11 @@ class StockFragment : Fragment() {
         // 리스트 아이템 클릭 시 해당 위치로 이동
         heldStockListAdapter.setItemClickListener(object : HeldStockListAdapter.OnItemClickListener {
             override fun onClickListItem(v: View, position: Int) {
-                //onClickSearchListItem(selectedStockNames[position], position)
+                val context = requireContext()
+                val intent = Intent(context, StockManager::class.java)
+                // 필요하다면 선택한 종목 정보도 putExtra로 전달 가능
+                intent.putExtra("stockItem", heldStocks.toList()[position])
+                startActivity(intent)
             }
             override fun onClickDeleteCheckBox(v: View, position: Int, isChecked: Boolean) {}
         })

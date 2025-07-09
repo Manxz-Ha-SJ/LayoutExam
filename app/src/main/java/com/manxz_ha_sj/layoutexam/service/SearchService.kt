@@ -1,4 +1,5 @@
 package com.manxz_ha_sj.layoutexam.service
+import java.io.Serializable
 
 data class StockPriceResponse(
     val response: StockPriceOuter
@@ -22,4 +23,4 @@ data class StockItem(
     val mrktCtg: String,   // 시장구분 (KOSDAQ 등)
     val clpr: String,      // 종가
     val vs: String         // 전일 대비
-)
+): Serializable

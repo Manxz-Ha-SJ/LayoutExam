@@ -78,7 +78,6 @@ class SearchManager {
                                 stockItems.add(StockItem(it.basDt, it.itmsNm, it.mrktCtg, it.clpr, it.vs))
                             }
                             found = true // 데이터 찾음 → 루프 종료
-                            break
                         }
                     }
                 }

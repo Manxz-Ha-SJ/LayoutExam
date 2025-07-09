@@ -54,6 +54,13 @@ class HeldStockListAdapter : ListAdapter<StockItem, HeldStockListAdapter.ViewHol
         val item = getItem(position)
         holder.binding.tvStockName.text = item.itmsNm
         holder.binding.tvStockType.text = item.mrktCtg
+
+        // 아이템 클릭 리스너 연결
+        holder.binding.root.setOnClickListener {
+            if (::itemClickListener.isInitialized) {
+                itemClickListener.onClickListItem(it, holder.adapterPosition)
+            }
+        }
     }
 
     /**
