@@ -2,11 +2,14 @@ package com.manxz_ha_sj.layoutexam.service
 
 import com.manxz_ha_sj.layoutexam.BuildConfig
 import com.google.gson.Gson
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+
 
 class SearchManager {
     private val simpleDateFormat = SimpleDateFormat("yyyyMMdd", Locale.KOREA)
@@ -36,37 +39,65 @@ class SearchManager {
     }
 
     /**
-     * 종목명 리스트를 API에서 받아오는 함수
-     * @param onResult (종목명, 시장구분) 쌍의 리스트를 반환
+     * 공공데이터포털을 통해 전체 주식 종목명과 시장 정보를 가져오는 함수
+     * - 오늘 날짜부터 시작해서 최대 14일 전까지 거슬러 가며 데이터를 찾음
+     * - 데이터가 있는 가장 최근 날짜의 데이터를 기준으로 목록을 가져옴
+     * - 코루틴 기반으로 I/O 작업을 안전하게 처리함
      */
-    fun getStockNames(
-        onResult: (List<Pair<String, String>>) -> Unit
-    ) {
-        val calendar = Calendar.getInstance().apply {
-            while (get(Calendar.DAY_OF_WEEK) != Calendar.WEDNESDAY) {
-                add(Calendar.DATE, -1)
-            }
-        }
-        val basDt = simpleDateFormat.format(calendar.time)
-        val nameMarketPairs = mutableSetOf<Pair<String, String>>()
-        Thread {
+    suspend fun getStockNames(): List<StockItem> = withContext(Dispatchers.IO) {
+        // 오늘 날짜를 기준으로 시작
+        val calendar = Calendar.getInstance()
+
+        // 결과를 저장할 Set (중복 제거용)
+        val stockItems = mutableSetOf<StockItem>()
+
+        var found = false // 데이터를 찾았는지 여부
+        var tries = 0     // 시도 횟수 (최대 14번)
+
+        // 데이터가 없으면 하루씩 줄이며 최대 14일간 반복
+        while (!found && tries < 14) {
+            val basDt = simpleDateFormat.format(calendar.time) // 기준일자 (yyyyMMdd 형식)
+
             try {
+                // 각 페이지에 대해 반복 요청
                 for (page in 1..totalPages) {
-                    val url = buildUrl(basDt, page)
-                    val request = Request.Builder().url(url).build()
-                    val response = client.newCall(request).execute()
-                    val body = response.body?.string()
-                    if (body != null) {
+                    val url = buildUrl(basDt, page) // URL 생성
+                    val request = Request.Builder().url(url).build() // HTTP 요청 생성
+                    val response = client.newCall(request).execute() // 동기 네트워크 요청 실행
+
+                    val body = response.body?.string() // 응답 본문 문자열로 추출
+                    if (!body.isNullOrEmpty()) {
+                        // JSON 응답 파싱
                         val result = Gson().fromJson(body, StockPriceResponse::class.java)
-                        result.response.body.items.item.forEach {
-                            nameMarketPairs.add(it.itmsNm to it.mrktCtg)
+                        val items = result.response.body.items.item
+
+                        // 실제 종목 데이터가 존재하면
+                        if (!items.isNullOrEmpty()) {
+                            // StockItem 객체를 Set에 추가
+                            items.forEach {
+                                stockItems.add(StockItem(it.basDt, it.itmsNm, it.mrktCtg, it.clpr, it.vs))
+                            }
+                            found = true // 데이터 찾음 → 루프 종료
+                            break
                         }
                     }
                 }
-            } catch (_: Exception) { }
-            onResult(nameMarketPairs.sortedBy { it.first })
-        }.start()
+            } catch (_: Exception) {
+                // 네트워크 오류, JSON 파싱 오류 등 무시하고 다음 날짜 시도
+            }
+
+            if (!found) {
+                // 하루 전으로 이동하여 재시도
+                calendar.add(Calendar.DATE, -1)
+                tries++
+            }
+        }
+
+        // 종목명을 기준으로 정렬 후 반환
+        return@withContext stockItems.sortedBy { it.itmsNm }
     }
+
+
 
     // 초성 추출 함수
     fun getInitialSound(str: String): String {

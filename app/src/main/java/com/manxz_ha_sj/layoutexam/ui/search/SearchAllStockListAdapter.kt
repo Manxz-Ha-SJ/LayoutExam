@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.manxz_ha_sj.layoutexam.databinding.ItemSearchStockBinding
+import com.manxz_ha_sj.layoutexam.service.StockItem
 
 /**
  * @class StockNameSearchListAdapter
@@ -18,29 +19,29 @@ import com.manxz_ha_sj.layoutexam.databinding.ItemSearchStockBinding
  *
  * @param onItemClick 아이템 클릭 시 호출되는 콜백 (선택적)
  */
-class StockNameSearchListAdapter(
-    private val onItemClick: ((String) -> Unit)? = null
-) : ListAdapter<Pair<String, String>, StockNameSearchListAdapter.ViewHolder>(DIFF) {
+class SearchAllStockListAdapter(
+    private val onItemClick: ((StockItem) -> Unit)? = null
+) : ListAdapter<StockItem, SearchAllStockListAdapter.ViewHolder>(DIFF) {
     companion object {
         /**
          * @var DIFF
          * @brief DiffUtil: 리스트의 변경사항을 효율적으로 계산하여 RecyclerView에 반영
          */
-        val DIFF = object : DiffUtil.ItemCallback<Pair<String, String>>() {
+        val DIFF = object : DiffUtil.ItemCallback<StockItem>() {
             /**
              * @brief 아이템이 같은지 비교
              * @param oldItem 이전 아이템
              * @param newItem 새로운 아이템
              * @return 동일 여부
              */
-            override fun areItemsTheSame(oldItem: Pair<String, String>, newItem: Pair<String, String>) = oldItem == newItem
+            override fun areItemsTheSame(oldItem: StockItem, newItem: StockItem) = oldItem.itmsNm == newItem.itmsNm && oldItem.mrktCtg == newItem.mrktCtg
             /**
              * @brief 아이템의 내용이 같은지 비교
              * @param oldItem 이전 아이템
              * @param newItem 새로운 아이템
              * @return 동일 여부
              */
-            override fun areContentsTheSame(oldItem: Pair<String, String>, newItem: Pair<String, String>) = oldItem == newItem
+            override fun areContentsTheSame(oldItem: StockItem, newItem: StockItem) = oldItem == newItem
         }
     }
     /**
@@ -66,12 +67,12 @@ class StockNameSearchListAdapter(
      * @param position 아이템 위치
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val (name, type) = getItem(position)
-        holder.binding.tvStockName.text = name
-        holder.binding.tvStockType.text = type
+        val item = getItem(position)
+        holder.binding.tvStockName.text = item.itmsNm
+        holder.binding.tvStockType.text = item.mrktCtg
         // 아이템 클릭 시 콜백 호출
         holder.binding.root.setOnClickListener {
-            onItemClick?.invoke(name)
+            onItemClick?.invoke(item)
         }
     }
 }

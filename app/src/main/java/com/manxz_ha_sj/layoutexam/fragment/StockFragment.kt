@@ -8,28 +8,32 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.manxz_ha_sj.layoutexam.databinding.FragmentStockBinding
-import com.manxz_ha_sj.layoutexam.ui.search.ResultStockListAdapter
-import com.manxz_ha_sj.layoutexam.ui.search.StockNameSearchListAdapter
+import com.manxz_ha_sj.layoutexam.ui.search.HeldStockListAdapter
+import com.manxz_ha_sj.layoutexam.ui.search.SearchAllStockListAdapter
 import com.manxz_ha_sj.layoutexam.service.SearchManager
+import com.manxz_ha_sj.layoutexam.service.StockItem
+import kotlinx.coroutines.launch
 
 class StockFragment : Fragment() {
     private var _binding: FragmentStockBinding? = null
     private val binding get() = _binding!!
-    /** @brief 종목명 검색 결과를 표시할 RecyclerView 어댑터 */
-    private lateinit var stockNameSearchListAdapter: StockNameSearchListAdapter
-    /** @brief 선택한 종목 표시할 RecyclerView 어댑터 */
-    private lateinit var resultStockListAdapter: ResultStockListAdapter
-    /**
-     * @brief 선택된 종목명을 저장할 리스트
-     * @details 종목명과 시장구분 정보를 Pair로 저장합니다.
-     * Pair<String, String> 형태로 변경하여 종목명과 시장구분을 함께 저장합니다.
-     */
-    // 선택된 종목명을 저장할 리스트 (Pair<String, String>으로 변경)
-    private val selectedStockNames = mutableListOf<Pair<String, String>>()
 
-    // nameMarketPairs 멤버 변수 추가
-    private var nameMarketPairs: List<Pair<String, String>> = emptyList()
+    //1. 종목명 검색
+    /** @brief 종목명 검색 결과를 표시할 RecyclerView 어댑터 */
+    private lateinit var searchAllStockListAdapter: SearchAllStockListAdapter
+    /** @brief 종목명과 시장구분 정보를 저장할 리스트 */
+    private var searchAllStockList = mutableListOf<StockItem>()
+
+
+    //2. 보유 종목 관리
+    /** @brief 선택한 종목 표시할 RecyclerView 어댑터 */
+    private lateinit var heldStockListAdapter: HeldStockListAdapter
+    // 선택된 종목명을 저장할 리스트 (Pair<String, String>으로 변경)
+    private val heldStocks  = mutableSetOf<StockItem>()
+
+
     /** @brief 검색을 위한 SearchManager 인스턴스 */
     private val searchManager = SearchManager.getInstance()
 
@@ -57,49 +61,74 @@ class StockFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        resultStockListAdapter = ResultStockListAdapter()
-        binding.rvResult.adapter = resultStockListAdapter
-        binding.rvResult.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
-
-        // 1. 어댑터 먼저 초기화
-        stockNameSearchListAdapter = StockNameSearchListAdapter { selectedName ->
-            // 선택한 종목명을 리스트에 추가 (시장구분 정보도 함께 추가)
-            val selectedPair = nameMarketPairs.find { it.first == selectedName } ?: (selectedName to "")
-            selectedStockNames.add(selectedPair)
-            resultStockListAdapter.submitList(selectedStockNames.toList())
-            binding.etStockName.setText("")
-            showSearchStockNames(false)
-        }
-        // 2. RecyclerView에 어댑터와 레이아웃매니저 연결
-        binding.rvSearchStockNames.adapter = stockNameSearchListAdapter
-        binding.rvSearchStockNames.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
-
         // 처음에는 RecyclerView를 숨김
         showSearchStockNames(false)
 
-        searchManager.getStockNames { nameMarketPairs ->
-            activity?.runOnUiThread {
-                if (isAdded) {
-                    this.nameMarketPairs = nameMarketPairs
-                }
+        // 1. 종목명 검색
+        searchAllStockListAdapter = SearchAllStockListAdapter { selectedItem ->
+            // 선택한 종목명을 리스트에 추가 (시장구분 정보도 함께 추가)
+            heldStocks.add(selectedItem)
+            heldStockListAdapter.submitList(heldStocks.toList())
+            showSearchStockNames(false)
+        }
+        // 2. RecyclerView에 어댑터와 레이아웃매니저 연결
+        binding.rvSearchAllStockList.adapter = searchAllStockListAdapter
+        binding.rvSearchAllStockList.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
+
+        // viewLifecycleOwner의 생명주기 범위에서 코루틴 실행 (Fragment가 살아있는 동안만 실행)
+        viewLifecycleOwner.lifecycleScope.launch {
+            // suspend 함수 호출: 주식 이름과 시장 정보를 가져옴 (백그라운드에서 실행됨)
+            val nameMarketPairs = searchManager.getStockNames()
+
+            // Fragment가 아직 UI에 붙어있는 상태일 때만 결과를 반영
+            if (isAdded) {
+                // 가져온 결과를 Fragment의 변수에 저장
+                this@StockFragment.searchAllStockList = nameMarketPairs.toMutableList()
+                // 어댑터에 Pair<String, String>으로 변환하여 전달
+                searchAllStockListAdapter.submitList(nameMarketPairs.toList())
             }
         }
 
+        binding.etStockName.setOnClickListener() {
+            binding.etStockName.setText("")
+        }
+        // EditText에 TextWatcher를 추가하여 텍스트 변경 시 검색 결과 업데이
         binding.etStockName.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 val keyword = s.toString()
                 if (keyword.isNotEmpty()) {
-                    val filtered = nameMarketPairs.filter { searchManager.isKoreanPrefixMatch(it.first, keyword) }
-                    stockNameSearchListAdapter.submitList(filtered)
+                    val keywordTrimmed = keyword.trim()
+                    val filtered = searchAllStockList.filter {
+                        searchManager.isKoreanPrefixMatch(it.itmsNm.trim(), keywordTrimmed)
+                    }
+                    searchAllStockListAdapter.submitList(filtered.toList())
                     showSearchStockNames(true)
                 } else {
-                    stockNameSearchListAdapter.submitList(emptyList())
+                    searchAllStockListAdapter.submitList(emptyList())
                     showSearchStockNames(false)
                 }
             }
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
+
+
+
+        // 2. 보유 종목 관리
+        heldStockListAdapter = HeldStockListAdapter()
+        binding.rvResult.adapter = heldStockListAdapter
+        binding.rvResult.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
+
+
+        // 리스트 아이템 클릭 시 해당 위치로 이동
+        heldStockListAdapter.setItemClickListener(object : HeldStockListAdapter.OnItemClickListener {
+            override fun onClickListItem(v: View, position: Int) {
+                //onClickSearchListItem(selectedStockNames[position], position)
+            }
+            override fun onClickDeleteCheckBox(v: View, position: Int, isChecked: Boolean) {}
+        })
+
+
     }
 
     /**
@@ -117,9 +146,9 @@ class StockFragment : Fragment() {
 
     private fun showSearchStockNames(show: Boolean) {
         if (show) {
-            binding.rvSearchStockNames.visibility = View.VISIBLE
+            binding.rvSearchAllStockList.visibility = View.VISIBLE
         } else {
-            binding.rvSearchStockNames.visibility = View.GONE
+            binding.rvSearchAllStockList.visibility = View.GONE
         }
     }
 }

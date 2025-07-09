@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp"
+        android:background="#FFFFFF"
+        tools:context=".MainActivity">
+        <!-- 상단 앱 이름 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <ImageButton
+                android:id="@+id/btn_back"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/bg_btn_back"
+                android:contentDescription="뒤로가기"
+                android:src="@drawable/ic_back"
+                android:padding="12dp"
+                android:elevation="0dp"
+                android:stateListAnimator="@null"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+            </ImageButton>
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="종목 관리(종목명)"
+                android:textColor="#8000B8"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:paddingBottom="5dp" />
+            <ImageView
+                android:id="@+id/iv_delete"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_poi_favorite_outline"
+                android:padding="2dp" />
+        </LinearLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
