@@ -61,9 +61,10 @@ class StockFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+/////////////////////////종목 검색/////////////////////////
         // 처음에는 RecyclerView를 숨김
         showSearchStockNames(false)
-
         // 1. 종목명 검색
         searchAllStockListAdapter = SearchAllStockListAdapter { selectedItem ->
             // 선택한 종목명을 리스트에 추가 (시장구분 정보도 함께 추가)
@@ -111,9 +112,11 @@ class StockFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
+        ////////////////////////종목 검색/////////////////////////
 
 
 
+        /////////////////////////보유 종목 관리/////////////////////////
         // 2. 보유 종목 관리
         heldStockListAdapter = HeldStockListAdapter()
         binding.rvResult.adapter = heldStockListAdapter
@@ -129,6 +132,8 @@ class StockFragment : Fragment() {
         })
 
 
+
+        /////////////////////////보유 종목 관리/////////////////////////
     }
 
     /**
