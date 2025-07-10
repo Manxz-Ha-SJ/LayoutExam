@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.manxz_ha_sj.layoutexam.databinding.ItemSearchStockBinding
+import com.manxz_ha_sj.layoutexam.databinding.ItemStocksHeldBinding
 import com.manxz_ha_sj.layoutexam.service.StockItem
 
 class HeldStockListAdapter : ListAdapter<StockItem, HeldStockListAdapter.ViewHolder>(DIFF) {
@@ -43,10 +43,10 @@ class HeldStockListAdapter : ListAdapter<StockItem, HeldStockListAdapter.ViewHol
         fun onClickDeleteCheckBox(v: View, position: Int, isChecked: Boolean)
     }
 
-    inner class ViewHolder(val binding: ItemSearchStockBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class ViewHolder(val binding: ItemStocksHeldBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = ItemSearchStockBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemStocksHeldBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 

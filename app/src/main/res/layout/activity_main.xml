@@ -32,17 +32,17 @@
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="타이틀 제목"
-                android:textColor="#8000B8"
+                android:text="주식 종목"
+                android:textColor="#696969"
                 android:layout_weight="1"
                 android:textStyle="bold"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:paddingBottom="5dp" />
             <ImageView
                 android:id="@+id/iv_delete"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@drawable/ic_poi_favorite_outline"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/ic_setting"
                 android:padding="2dp" />
         </LinearLayout>
 

@@ -1,6 +1,13 @@
 <resources>
     <string name="app_name">LayoutExam</string>
     <string name="search_stockname">종목명을 입력하세요 (예: 삼성전자)</string>
+    <string name="back">뒤로 가기</string>
+    <string name="date">20250710</string>
+    <string name="stock_name">종목명</string>
     <string name="stocks_held">보유 종목</string>
+    <string name="stock_base_date">기준일 : </string>
+    <string name="stock_close_price">종가</string>
+    <string name="stock_price">10.000</string>
+    <string name="stock_change_price">전일대비</string>
 
 </resources>

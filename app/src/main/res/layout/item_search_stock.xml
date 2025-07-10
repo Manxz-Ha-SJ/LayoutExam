@@ -31,7 +31,7 @@
                 android:id="@+id/iv_icon"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:src="@drawable/food"
+                android:src="@drawable/ic_check"
                 android:padding="4dp" />
             <LinearLayout
                 android:id="@+id/text_group"
@@ -65,7 +65,7 @@
                 android:id="@+id/iv_delete"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:src="@drawable/ic_poi_favorite_outline"
+                android:src="@drawable/ic_star_plus_outline"
                 android:padding="2dp" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
