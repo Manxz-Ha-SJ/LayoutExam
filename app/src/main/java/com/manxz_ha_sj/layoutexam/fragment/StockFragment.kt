@@ -137,8 +137,6 @@ class StockFragment : Fragment() {
             override fun onClickDeleteCheckBox(v: View, position: Int, isChecked: Boolean) {}
         })
 
-
-
         /////////////////////////보유 종목 관리/////////////////////////
     }
 

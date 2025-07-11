@@ -14,7 +14,6 @@ import java.util.Locale
 class SearchManager {
     private val simpleDateFormat = SimpleDateFormat("yyyyMMdd", Locale.KOREA)
     private val client = OkHttpClient()
-    private val totalPages = 4  // 1000개씩 4페이지 = 4000개 (필요시 더 늘릴 수 있음)
     private val numOfRows = 1000
 
     companion object {
@@ -47,12 +46,14 @@ class SearchManager {
     suspend fun getStockNames(): List<StockItem> = withContext(Dispatchers.IO) {
         // 오늘 날짜를 기준으로 시작
         val calendar = Calendar.getInstance()
+        calendar.add(Calendar.DATE, -1) // 하루 전 날짜 설정
 
         // 결과를 저장할 Set (중복 제거용)
         val stockItems = mutableSetOf<StockItem>()
 
         var found = false // 데이터를 찾았는지 여부
         var tries = 0     // 시도 횟수 (최대 14번)
+        var totalPages = 3  // 1000개씩 3페이지 = 3000개 (필요시 더 늘릴 수 있음)
 
         // 데이터가 없으면 하루씩 줄이며 최대 14일간 반복
         while (!found && tries < 14) {
@@ -71,11 +72,27 @@ class SearchManager {
                         val result = Gson().fromJson(body, StockPriceResponse::class.java)
                         val items = result.response.body.items.item
 
+                        totalPages = result.response.body.totalCount / numOfRows + 1 // 전체 페이지 수 재계산
+
                         // 실제 종목 데이터가 존재하면
                         if (!items.isNullOrEmpty()) {
                             // StockItem 객체를 Set에 추가
                             items.forEach {
-                                stockItems.add(StockItem(it.basDt, it.itmsNm, it.mrktCtg, it.clpr, it.vs))
+                                stockItems.add(StockItem(
+                                    it.basDt ?: "",
+                                    it.srtnCd ?: "",
+                                    it.itmsNm ?: "",
+                                    it.mrktCtg ?: "",
+                                    it.clpr ?: "",
+                                    it.vs ?: "",
+                                    it.fltRt ?: "",
+                                    it.mkp ?: "",
+                                    it.hipr ?: "",
+                                    it.lopr ?: "",
+                                    it.trqu ?: "",
+                                    it.trPrc ?: "",
+//                                    it.iscd ?: "",
+                                    it.istgStCnt ?: ""))
                             }
                             found = true // 데이터 찾음 → 루프 종료
                         }
