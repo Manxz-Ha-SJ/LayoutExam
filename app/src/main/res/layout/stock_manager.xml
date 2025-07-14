@@ -94,9 +94,8 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="70dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:text="@string/stock_code"
                         android:textColor="#999999"
                         android:textSize="12sp" />
@@ -115,8 +114,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="6dp">
+                    android:orientation="horizontal">
 
                     <View
                         android:layout_width="wrap_content"
@@ -145,9 +143,8 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="70dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:text="@string/stock_market_category"
                         android:textColor="#999999"
                         android:textSize="12sp" />
@@ -166,8 +163,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="6dp">
+                    android:orientation="horizontal">
 
                     <View
                         android:layout_width="wrap_content"
@@ -200,9 +196,8 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="70dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:text="@string/stock_market_price"
                         android:textColor="#999999"
                         android:textSize="12sp" />
@@ -221,8 +216,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="6dp">
+                    android:orientation="horizontal">
 
                     <View
                         android:layout_width="wrap_content"
@@ -251,9 +245,8 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="70dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:text="@string/stock_close_price"
                         android:textColor="#999999"
                         android:textSize="12sp" />
@@ -272,8 +265,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="6dp">
+                    android:orientation="horizontal">
 
                     <View
                         android:layout_width="wrap_content"
@@ -307,9 +299,8 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="70dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:text="@string/stock_change_price"
                         android:textColor="#999999"
                         android:textSize="12sp" />
@@ -328,8 +319,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="6dp">
+                    android:orientation="horizontal">
 
                     <View
                         android:layout_width="wrap_content"
@@ -358,9 +348,8 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="70dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:text="@string/stock_change_price_rate"
                         android:textColor="#999999"
                         android:textSize="12sp" />
@@ -379,8 +368,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="6dp">
+                    android:orientation="horizontal">
 
                     <View
                         android:layout_width="wrap_content"
@@ -414,9 +402,8 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="70dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:text="@string/stock_high_price"
                         android:textColor="#999999"
                         android:textSize="12sp" />
@@ -435,8 +422,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="6dp">
+                    android:orientation="horizontal">
 
                     <View
                         android:layout_width="wrap_content"
@@ -465,9 +451,8 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="70dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:text="@string/stock_low_price"
                         android:textColor="#999999"
                         android:textSize="12sp" />
@@ -486,8 +471,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="6dp">
+                    android:orientation="horizontal">
 
                     <View
                         android:layout_width="wrap_content"
@@ -520,9 +504,8 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="70dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:text="@string/stock_trading_quantity"
                         android:textColor="#999999"
                         android:textSize="12sp" />
@@ -541,8 +524,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="6dp">
+                    android:orientation="horizontal">
 
                     <View
                         android:layout_width="wrap_content"
@@ -571,9 +553,8 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="70dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:text="@string/stock_trading_price"
                         android:textColor="#999999"
                         android:textSize="12sp" />
@@ -592,8 +573,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="6dp">
+                    android:orientation="horizontal">
 
                     <View
                         android:layout_width="wrap_content"
