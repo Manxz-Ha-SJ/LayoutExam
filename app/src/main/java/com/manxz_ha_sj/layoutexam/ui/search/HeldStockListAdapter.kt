@@ -61,6 +61,13 @@ class HeldStockListAdapter : ListAdapter<StockItem, HeldStockListAdapter.ViewHol
                 itemClickListener.onClickListItem(it, holder.adapterPosition)
             }
         }
+
+        // 삭제 버튼 클릭 리스너 연결 하고 삭제하기
+        holder.binding.ivDelete.setOnClickListener {
+            if (::itemClickListener.isInitialized) {
+                itemClickListener.onClickDeleteCheckBox(it, holder.adapterPosition, true)
+            }
+        }
     }
 
     /**

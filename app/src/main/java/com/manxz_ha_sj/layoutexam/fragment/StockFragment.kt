@@ -134,7 +134,13 @@ class StockFragment : Fragment() {
                 intent.putExtra("stockItem", heldStocks.toList()[position])
                 startActivity(intent)
             }
-            override fun onClickDeleteCheckBox(v: View, position: Int, isChecked: Boolean) {}
+            override fun onClickDeleteCheckBox(v: View, position: Int, isChecked: Boolean) {
+                if (isChecked) {
+                    // 체크박스가 선택되면 해당 종목을 리스트에서 제거
+                    heldStocks.remove(heldStocks.toList()[position])
+                    heldStockListAdapter.submitList(heldStocks.toList())
+                }
+            }
         })
 
         /////////////////////////보유 종목 관리/////////////////////////

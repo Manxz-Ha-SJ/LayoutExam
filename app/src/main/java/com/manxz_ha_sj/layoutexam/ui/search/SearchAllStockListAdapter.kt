@@ -70,8 +70,8 @@ class SearchAllStockListAdapter(
         val item = getItem(position)
         holder.binding.tvStockName.text = item.itmsNm
         holder.binding.tvStockType.text = item.mrktCtg
-        // 아이템 클릭 시 콜백 호출
-        holder.binding.root.setOnClickListener {
+        // 추가 클릭 시 콜백 호출
+        holder.binding.ivFavorite.setOnClickListener {
             onItemClick?.invoke(item)
         }
     }
